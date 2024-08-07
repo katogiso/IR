@@ -7,11 +7,36 @@
       - 対象も日本メーカー
       - 長い期間の High でデータの送信の開始、終了
 2. HW の理解
-   1. M5Stick の GPU はどうやって 38kHzで動かすのか
+   1. M5Stick の GPIP はどうやって 38kHzで動かすのか
       - そもそも動かせるのか
+
+         ESP32(CPU)のクロックが240MHz [SwitchScience 商品情報](https://www.switch-science.com/products/9350)
+
       - 既存のライブラリ[IRsend](https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/src/IRSend.hpp)
 
-    2. M5 の IR Remote 回路図
+         こちらも GPIO を直接動かしているので、プログラムから直接ドライブ可能だと考えられる。
+
+   2. M5 の IR Remote 回路図
       - [公式ドキュメント](https://docs.m5stack.com/en/unit/ir)
       - 回路図
         ![回路図 : 公式ドキュメントより](https://static-cdn.m5stack.com/resource/docs/products/unit/ir/ir_sch_01.webp)
+      - 受信 IC
+
+         [IRM-3638T](https://www.mouser.jp/datasheet/2/143/EVER_S_A0007513414_1-2548705.pdf)
+
+         ブロックダイヤグラムから 38kHz の搬送波はフィルタリング（検波）されて信号があれば Low, 信号が無ければ High となって INPUT に出てくるので、結局 570uSec程度のトグルをCPUで検出できれば受信ができる
+      - 出力
+         GPIO を 38kHzでトグルさせる必要がある
+
+3. 正規のリモコンからデータを取得する
+   1. IR Remote の回路図から INPUT Port (G33) をloop()で読み取る 
+
+      setup() は起動時に実行する内容を記述
+
+      loop() は起動中繰り返し実行する内容を記述
+
+   2.  サンプリング定理とリモコンのプロトコルから 1/(570x10^-6[sec]) x 2 よりもGPIOのデータを読み取れれば良い
+   
+      受信結果は Serial で VS code の端末へ出力する
+
+   3. 
