@@ -15,6 +15,10 @@
       - 既存のライブラリ[IRsend](https://github.com/Arduino-IRremote/Arduino-IRremote/blob/master/src/IRSend.hpp)
 
          こちらも GPIO を直接動かしているので、プログラムから直接ドライブ可能だと考えられる。
+      
+      - オシロスコープで確認
+
+      ![波形](resources/LabNation_Screenshot3.png)
 
    2. M5 の IR Remote 回路図
       - [公式ドキュメント](https://docs.m5stack.com/en/unit/ir)
@@ -35,8 +39,18 @@
 
       loop() は起動中繰り返し実行する内容を記述
 
-   2.  サンプリング定理とリモコンのプロトコルから 1/(570x10^-6[sec]) x 2 よりもGPIOのデータを読み取れれば良い
+   2. サンプリング定理とリモコンのプロトコルから 1/(570x10^-6[sec]) x 2 よりもGPIOのデータを読み取れれば良い
    
       受信結果は Serial で VS code の端末へ出力する
+   
+   3. 受信波形
+      ![波形](resources/LabNation_Screenshot5.png)
 
-   3. 
+   4. データのフォーマット解析
+
+      人力で解析する。今回は NEC フォーマットだった。 
+
+4. データを送信する
+   1. フォーマット通りに送信する 
+   2. データを送信
+      ![波形](resources/LabNation_Screenshot8.png)
